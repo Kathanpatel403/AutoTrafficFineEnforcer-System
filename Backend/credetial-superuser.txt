@@ -1,0 +1,8 @@
+# Django superuser:
+username: kathanpatel403
+email: kathanpatel403@gmail.com
+password: Numeric123
+
+# mongodb:
+username: dbUser
+password: 123
