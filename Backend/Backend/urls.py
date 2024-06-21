@@ -3,5 +3,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('auth/', include('Application.urls')),  # Your authentication app
+    path('auth/', include('Application.urls')), 
+    path('mongodb/', include('mongodbapp.urls'))
 ]

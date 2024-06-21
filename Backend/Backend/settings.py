@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
+    'djongo',
+    'mongodbapp'
 ]
 
 MIDDLEWARE = [
@@ -82,7 +84,16 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     },
+    'mongodb': {
+        'ENGINE': 'djongo',
+        'NAME': 'AutoFineEnforcer',  # Name of your MongoDB database
+        'CLIENT': {
+            'host': 'mongodb+srv://AutoFineEnforcer-System:123@autotrafficfineenforcer.caji8p2.mongodb.net/',  # MongoDB host address
+        }
+    }
 }
+
+DATABASE_ROUTERS = ['mongodbapp.routers.MongoDBRouter']
 
 
 # Password validation

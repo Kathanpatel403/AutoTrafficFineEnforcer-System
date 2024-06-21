@@ -1,27 +1,20 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
-import { getFirestore, doc, getDoc } from "firebase/firestore";
-import InputControlPage from "./InputControlPage";
-import { auth, firestore } from "../config/firebase";
-import logo from '../assets/images/logo.png';
-import logo1 from '../assets/images/hiking.png';
-import './LoginPage.css'; // Import the CSS file for styling
+
 import { Icon } from 'react-icons-kit';
 import { eyeOff } from 'react-icons-kit/feather/eyeOff';
 import { eye } from 'react-icons-kit/feather/eye';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import axios from "axios";
 
 function LoginPage() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
 
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
+  const handleUsernameChange = (event) => {
+    setUsername(event.target.value);
   };
 
   const handlePasswordChange = (event) => {
@@ -32,82 +25,76 @@ function LoginPage() {
     setShowPassword(prevShowPassword => !prevShowPassword);
   };
 
-  const handleSignIn = async () => {
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+
     try {
-      if (!email || !password) {
-        setErrorMsg("All fields are mandatory");
-        return;
-      }
+        const response = await axios.post('http://localhost:8000/auth/api/login/', {
+            username,
+            password
+        });
 
-      const auth = getAuth();
-      await signInWithEmailAndPassword(auth, email, password);
-
-      // If sign-in successful, navigate to the home page or any other desired route
-      navigate("/");
+        console.log('Login successful:', response.data);
+        // Optionally handle success message or redirect to login page
     } catch (error) {
-      setErrorMsg("Failed to sign in. Please check your credentials.");
-      console.error("Error signing in:", error);
+        console.error('Login error:', error);
+        // Optionally handle error message (e.g., display error to user)
     }
-  };
+};
 
   return (
-    <div className="login-container">
-      <div className="login-content">
-        <div className="glass-login">
-          <div className="logo-container">
-            <img src={logo} alt="logo image" className="logo" />
-          </div>
-          <div className="form-container">
-            <h1 className="login-heading">Login</h1>
+    <div className="login-container h-screen flex justify-center items-center bg-gray-900">
+      <div className="glass-login rounded-2xl backdrop-filter backdrop-blur-md shadow-md bg-gray-800 p-10 w-96">
+        <div className="form-container">
+          <h1 className="login-heading text-2xl font-bold text-white mb-5">Login</h1>
 
-            <InputControlPage
-              label="Email"
-              onChange={handleEmailChange}
-              placeholder="Enter email address"
-              className="input-field"
-            />
+          <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">Email</label>
+          <input
+            id="email"
+            type="email"
+            value={username}
+            onChange={handleUsernameChange}
+            placeholder="Enter email address"
+            className="input-field w-full p-3 mb-4 border-0 rounded-md bg-gray-700 text-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500"
+          />
 
-            <InputControlPage
-              label="Password"
-              placeholder="Enter Password"
+          <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-1">Password</label>
+          <div className="relative">
+            <input
+              id="password"
               type={showPassword ? "text" : "password"}
+              value={password}
               onChange={handlePasswordChange}
-              className="input-field"
+              placeholder="Enter Password"
+              className="input-field w-full p-3 mb-4 border-0 rounded-md bg-gray-700 text-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500"
             />
             <button
               onClick={handleTogglePasswordVisibility}
-              className="absolute right-10 t bottom-0 mt-auto mb-auto mr-3"
-              style={{
-                top:'100px'
-              }}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
             >
-              <Icon icon={showPassword ? eye : eyeOff} size={15} />
+              <Icon icon={showPassword ? eye : eyeOff} size={20} />
             </button>
-
-            <div className="error-message">
-              <b className="text-red-500 block mb-2">{errorMsg}</b>
-            </div>
-
-            <button onClick={handleSignIn} className="login-button">
-              Login
-            </button>
-
-            <div className="forgot-password">
-              <Link to="/forgotpassword" className="forgot-password-link">
-                Forgot Password?
-              </Link>
-            </div>
-
-            <p className="signup-text">
-              Don't have an account?{" "}
-              <span className="signup-link">
-                <Link to="/signup">Sign up</Link>
-              </span>
-            </p>
           </div>
-        </div>
-        <div className="image-container">
-          <img src={logo1} alt="Image Description" className="image" />
+
+          <button
+            onClick={handleSignIn}
+            className="login-button w-full p-3 bg-green-600 text-white rounded-md cursor-pointer hover:bg-green-700"
+          >
+            Login
+          </button>
+
+          <div className="forgot-password text-right mt-3">
+            <Link to="/forgotpassword" className="forgot-password-link text-gray-300 hover:text-green-500">
+              Forgot Password?
+            </Link>
+          </div>
+
+          <p className="signup-text text-right mt-3 text-gray-300">
+            Don't have an account?{" "}
+            <span className="signup-link">
+              <Link to="/signup" className="text-green-500 hover:underline">Sign up</Link>
+            </span>
+          </p>
         </div>
       </div>
     </div>

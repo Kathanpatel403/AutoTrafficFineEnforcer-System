@@ -1,159 +1,123 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { collection, doc, setDoc } from 'firebase/firestore';
-import { auth, firestore } from "../config/firebase";
-import InputControlPage from "./InputControlPage";
-import logo from '../assets/images/logo.png';
-import background from "../assets/images/background.jpg";
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+
 import { Icon } from 'react-icons-kit';
 import { eyeOff } from 'react-icons-kit/feather/eyeOff';
 import { eye } from 'react-icons-kit/feather/eye';
-import '../screens/LoginPage.css'
-import logo1 from '../assets/images/backgroundforall.png'
+import axios from 'axios';
+
+
 function SignupPage() {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
+    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [errorMsg, setErrorMsg] = useState("");
 
-  const handleSubmission = async () => {
-    if (!values.name || !values.email || !values.pass) {
-      setErrorMsg("All fields are mendetory");
-      return;
-    }
-    setErrorMsg("");
+    const handleUsernameChange = (event) => {
+        setUsername(event.target.value);
+    };
 
-    if (values.email && values.pass) {
-      try {
-        const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.pass);
+    const handleEmailChange = (event) => {
+        setEmail(event.target.value);
+    };
 
-        const uid = userCredential.user.uid;
+    const handlePasswordChange = (event) => {
+        setPassword(event.target.value);
+    };
 
-        const userRoleRef = doc(collection(firestore, 'userRoles'), uid);
-        setDoc(userRoleRef, {
-          role: "user",
-          email: values.email,
-          name: values.name,
-        }).then(() => {
-          console.log("User role set successfully.");
-          toast.success('Signup successful!', {
-            position: 'bottom-right',
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-          navigate("/userinfo")
-        }).catch((error) => {
-          console.error("Error setting user role:", error);
-        })
-      } catch (err) {
-        alert(`got error: ${err.message}`);
-        console.log("got error: ", err.message);
-      }
-    }
-  };
+    const handleTogglePasswordVisibility = () => {
+        setShowPassword(prevShowPassword => !prevShowPassword);
+    };
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [icon, setIcon] = useState(eyeOff);
-  const [values, setValues] = useState({
-    name: "",
-    email: "",
-    pass: ""
-  });
-  const [errorMsg, setErrorMsg] = useState("");
-  const [submitButtonDisabled, setSubmitButtonDisabled] = useState(false);
+    const handleSignUp = async (e) => {
+        e.preventDefault();
 
-  const handleNameChange = (event) => {
-    setValues((prev) => ({ ...prev, name: event.target.value }));
-  };
+        try {
+            const response = await axios.post('http://localhost:8000/auth/api/register/', {
+                username,
+                email,
+                password
+            });
 
-  const handleEmailChange = (event) => {
-    setValues((prev) => ({ ...prev, email: event.target.value }));
-  };
-
-  const handlePasswordChange = (event) => {
-    setValues((prev) => ({ ...prev, pass: event.target.value }));
-  };
-
-  const handleToggle = () => {
-    setShowPassword((prevShowPassword) => !prevShowPassword);
-    setIcon((prevIcon) => (prevIcon === eyeOff ? eye : eyeOff));
-  };
+            console.log('Signup successful:', response.data);
+            // Optionally handle success message or redirect to login page
+        } catch (error) {
+            console.error('Signup error:', error);
+            // Optionally handle error message (e.g., display error to user)
+        }
+    };
 
 
-  return (
-    <div className="flex flex-row items-center justify-center h-screen bg-cover bg-center bg-no-repeat min-h-screen"
-     
-    >
-      <div className="">
-        <div className="">
-          <img src={logo} alt="logo image" className="w-[220px] h-[220px] ml-[120px] mt-[-100px]" />
+    return (
+        <div className="signup-container h-screen flex justify-center items-center bg-gray-900">
+            <div className="glass-signup rounded-2xl backdrop-filter backdrop-blur-md shadow-md bg-gray-800 p-10 w-96">
+                <div className="form-container">
+                    <h1 className="signup-heading text-2xl font-bold text-white mb-5">Sign Up</h1>
+
+                    <label htmlFor="username" className="block text-sm font-medium text-gray-300 mb-1">Username</label>
+                    <input
+                        id="username"
+                        type="text"
+                        value={username}
+                        onChange={handleUsernameChange}
+                        placeholder="Enter username"
+                        className="input-field w-full p-3 mb-4 border-0 rounded-md bg-gray-700 text-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500"
+                    />
+
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">Email</label>
+                    <input
+                        id="email"
+                        type="email"
+                        value={email}
+                        onChange={handleEmailChange}
+                        placeholder="Enter email address"
+                        className="input-field w-full p-3 mb-4 border-0 rounded-md bg-gray-700 text-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500"
+                    />
+
+                    <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-1">Password</label>
+                    <div className="relative">
+                        <input
+                            id="password"
+                            type={showPassword ? "text" : "password"}
+                            value={password}
+                            onChange={handlePasswordChange}
+                            placeholder="Enter Password"
+                            className="input-field w-full p-3 mb-4 border-0 rounded-md bg-gray-700 text-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500"
+                        />
+                        <button
+                            onClick={handleTogglePasswordVisibility}
+                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                        >
+                            <Icon icon={showPassword ? eye : eyeOff} size={20} />
+                        </button>
+                    </div>
+
+                    {errorMsg && (
+                        <div className="error-message mb-5">
+                            <b className="text-red-500 block mb-2">{errorMsg}</b>
+                        </div>
+                    )}
+
+                    <button
+                        onClick={handleSignUp}
+                        className="signup-button w-full p-3 bg-green-600 text-white rounded-md cursor-pointer hover:bg-green-700"
+                    >
+                        Sign Up
+                    </button>
+
+                    <div className="login-link text-center mt-3 text-gray-300">
+                        Already have an account?{" "}
+                        <span className="signup-link">
+                            <Link to="/login" className="text-green-500 hover:underline">Log in</Link>
+                        </span>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div className="p-8 bg-white rounded-lg shadow-xl w-[450px] mt-[-30px]">
-          <h1 className="text-2xl font-bold mb-4 ml-[150px]">Signup</h1>
-
-          <div className="mb-4">
-            <label className="block mb-2 text-gray-800 text-xl">Name</label>
-            <input
-              type="text"
-              value={values.name}
-              onChange={handleNameChange}
-              placeholder="Enter your name"
-              className="w-full px-3 py-2 border rounded-md"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block mb-2 text-gray-800 text-xl">Email</label>
-            <input
-              type="email"
-              value={values.email}
-              onChange={handleEmailChange}
-              placeholder="Enter email address"
-              className="w-full px-3 py-2 border rounded-md"
-            />
-          </div>
-          <div className="mb-4 relative">
-            <label className="block mb-2 text-gray-800 text-xl">Password</label>
-            <input
-              type={showPassword ? 'text' : 'password'}
-              value={values.pass}
-              onChange={handlePasswordChange}
-              placeholder="Enter Password"
-              className="w-full px-3 py-2 border rounded-md pr-10"
-            />
-            <button
-              onClick={handleToggle}
-              className="absolute top-8 right-0 bottom-0 mt-auto mb-auto mr-3"
-            >
-              <Icon icon={icon} size={24} />
-            </button>
-          </div>
-
-          <div className="mt-6">
-            <b className="text-red-500 block mb-2">{errorMsg}</b>
-            <button
-              disabled={submitButtonDisabled}
-              onClick={handleSubmission}
-              className="text-white py-2 px-4 rounded-md overflow-hidden transform transition-all duration-300 ease-in-out bg-gray-600 hover:scale-105 hover:bg-gray-800 hover:shadow-md group"
-            >
-              Signup
-              <span className="absolute top-0 left-0 w-full h-full bg-white opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-50"></span>
-            </button>
-          </div>
-
-          <p className="mt-4 text-m">
-            Already have an account?{" "}
-            <span className="text-gray-500 font-semibold">
-              <Link to="/login">Login</Link>
-            </span>
-          </p>
-        </div>
-      </div>
-    </div>
-  )
+    );
 }
 
 export default SignupPage;
