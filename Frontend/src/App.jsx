@@ -5,12 +5,14 @@ import SignupPage from './screens/SignupPage';
 import AdminHomePage from './screens/AdminHomePage';
 import HomePage from './screens/HomePage';
 import AddPolicePage from './screens/AddPolicePage';
+import DefaultPage from './screens/DefaultPage';
 
 function App() {
   return (
     <div className="App">
       <Router>
         <Routes>
+          <Route path="/" element={<DefaultPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/home" element={<HomePage />} />
