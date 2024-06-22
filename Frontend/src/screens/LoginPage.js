@@ -21,7 +21,7 @@ function LoginPage() {
   useEffect(() => {
     const intervalId = setInterval(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 1000);
+    }, 1500);
 
     return () => clearInterval(intervalId);
   }, []);
@@ -47,11 +47,30 @@ function LoginPage() {
         password
       });
 
+      const { user, token } = response.data;
+
+      // Store user data in localStorage
+      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('token', token);
+
       console.log('Login successful:', response.data);
-      // Optionally handle success message or redirect to login page
+
+      // Redirect to homepage or any other route
+      if(user.groups == "admin"){
+        navigate("/admin/home");
+      }
+      else{
+        navigate('/home')
+      }
     } catch (error) {
       console.error('Login error:', error);
       // Optionally handle error message (e.g., display error to user)
+    }
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleSignIn(event);
     }
   };
 
@@ -72,10 +91,11 @@ function LoginPage() {
 
             <label htmlFor="username" className="block text-sm font-medium text-gray-300 mb-1">Username</label>
             <input
-              id="email"
-              type="email"
+              id="username"
+              type="text"
               value={username}
               onChange={handleUsernameChange}
+              onKeyDown={handleKeyDown}
               placeholder="Enter username"
               className="input-field w-full p-3 mb-4 border-0 rounded-md bg-gray-700 text-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500"
             />
@@ -87,6 +107,7 @@ function LoginPage() {
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={handlePasswordChange}
+                onKeyDown={handleKeyDown}
                 placeholder="Enter Password"
                 className="input-field w-full p-3 mb-4 border-0 rounded-md bg-gray-700 text-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500"
               />

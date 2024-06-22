@@ -23,7 +23,7 @@ function SignupPage() {
     useEffect(() => {
         const intervalId = setInterval(() => {
             setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
-        }, 1000);
+        }, 1500);
 
         return () => clearInterval(intervalId);
     }, []);
@@ -55,10 +55,22 @@ function SignupPage() {
             });
 
             console.log('Signup successful:', response.data);
-            // Optionally handle success message or redirect to login page
+            const {user, token} = response.data;
+            // Store user data and token in localStorage
+            localStorage.setItem('user', JSON.stringify(user));
+            localStorage.setItem('token', token);
+
+            // Redirect to homepage
+            navigate('/home');
         } catch (error) {
             console.error('Signup error:', error);
-            // Optionally handle error message (e.g., display error to user)
+            setErrorMsg('Signup failed. Please try again.');  // Optionally handle error message (e.g., display error to user)
+        }
+    };
+
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            handleSignUp(event);
         }
     };
 
@@ -75,6 +87,7 @@ function SignupPage() {
                             type="text"
                             value={username}
                             onChange={handleUsernameChange}
+                            onKeyDown={handleKeyDown}
                             placeholder="Enter username"
                             className="input-field w-full p-3 mb-4 border-0 rounded-md bg-gray-700 text-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500"
                         />
@@ -85,6 +98,7 @@ function SignupPage() {
                             type="email"
                             value={email}
                             onChange={handleEmailChange}
+                            onKeyDown={handleKeyDown}
                             placeholder="Enter email address"
                             className="input-field w-full p-3 mb-4 border-0 rounded-md bg-gray-700 text-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500"
                         />
@@ -96,12 +110,13 @@ function SignupPage() {
                                 type={showPassword ? "text" : "password"}
                                 value={password}
                                 onChange={handlePasswordChange}
+                                onKeyDown={handleKeyDown}
                                 placeholder="Enter Password"
                                 className="input-field w-full p-3 mb-4 border-0 rounded-md bg-gray-700 text-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500"
                             />
                             <button
                                 onClick={handleTogglePasswordVisibility}
-                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                                className="absolute right-3 top-1/3 transform -translate-y-1/2 text-gray-400"
                             >
                                 <Icon icon={showPassword ? eye : eyeOff} size={20} />
                             </button>
