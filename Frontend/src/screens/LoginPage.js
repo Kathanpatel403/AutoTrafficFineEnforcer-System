@@ -17,6 +17,7 @@ function LoginPage() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -42,31 +43,34 @@ function LoginPage() {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:8000/auth/api/login/', {
-        username,
-        password
-      });
+        const response = await axios.post('http://localhost:8000/auth/api/login/', {
+            username,
+            password
+        });
 
-      const { user, token } = response.data;
+        const { user, token } = response.data;
 
-      // Store user data in localStorage
-      localStorage.setItem('user', JSON.stringify(user));
-      localStorage.setItem('token', token);
+        // Store user data in localStorage
+        localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('token', token);
 
-      console.log('Login successful:', response.data);
+        console.log('Login successful:', response.data);
 
-      // Redirect to homepage or any other route
-      if(user.groups == "admin"){
-        navigate("/admin/home");
-      }
-      else{
-        navigate('/home')
-      }
+        // Redirect to homepage or any other route
+        if (user.groups.includes("admin")) {
+            navigate("/admin/home");
+        } else {
+            navigate('/home');
+        }
     } catch (error) {
-      console.error('Login error:', error);
-      // Optionally handle error message (e.g., display error to user)
+        console.error('Login error:', error);
+        if (error.response && error.response.data && error.response.data.error) {
+            setErrorMsg(error.response.data.error);
+        } else {
+            setErrorMsg('Login failed. Please try again.');
+        }
     }
-  };
+};
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
@@ -118,14 +122,18 @@ function LoginPage() {
                 <Icon icon={showPassword ? eye : eyeOff} size={20} />
               </button>
             </div>
-
+            {errorMsg && (
+              <div className="error-message mb-5">
+                  <b className="text-red-500 block mb-2">{errorMsg}</b>
+              </div>
+          )}
             <button
               onClick={handleSignIn}
               className="login-button w-full p-3 bg-green-600 text-white rounded-md cursor-pointer hover:bg-green-700"
             >
               Login
             </button>
-
+            
             <div className="forgot-password text-right mt-3">
               <Link to="/forgotpassword" className="forgot-password-link text-gray-300 hover:text-green-500">
                 Forgot Password?

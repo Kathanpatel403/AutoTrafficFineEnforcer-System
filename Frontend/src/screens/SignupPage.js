@@ -55,16 +55,26 @@ function SignupPage() {
             });
 
             console.log('Signup successful:', response.data);
-            const {user, token} = response.data;
+            const { user, token } = response.data;
             // Store user data and token in localStorage
             localStorage.setItem('user', JSON.stringify(user));
             localStorage.setItem('token', token);
 
             // Redirect to homepage
-            navigate('/home');
+            navigate('/additional-info');
         } catch (error) {
             console.error('Signup error:', error);
-            setErrorMsg('Signup failed. Please try again.');  // Optionally handle error message (e.g., display error to user)
+            if (error.response && error.response.data) {
+                if (error.response.data.username) {
+                    setErrorMsg(error.response.data.username);
+                } else if (error.response.data.email) {
+                    setErrorMsg(error.response.data.email);
+                } else {
+                    setErrorMsg('Signup failed. Please try again.');
+                }
+            } else {
+                setErrorMsg('Signup failed. Please try again.');
+            }
         }
     };
 

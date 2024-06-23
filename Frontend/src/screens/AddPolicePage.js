@@ -40,7 +40,7 @@ function AddPolicePage() {
     // Function to handle form submission
     const handleSignUp = async (e) => {
         e.preventDefault();
-
+    
         try {
             // Send POST request to backend endpoint
             const response = await axios.post('http://localhost:8000/auth/api/assign-police-role/', {
@@ -48,13 +48,18 @@ function AddPolicePage() {
                 email,
                 password
             });
-
+    
             console.log('Signup successful:', response.data);
+            setErrorMsg('');  // Clear error message if signup is successful
         } catch (error) {
             console.error('Signup error:', error);
-
-            // Optionally handle error message (e.g., display error to user)
-            setErrorMsg('Signup failed. Please try again.');
+    
+            // Handle error message
+            if (error.response && error.response.data && error.response.data.error) {
+                setErrorMsg(error.response.data.error);
+            } else {
+                setErrorMsg('Signup failed. Please try again.');
+            }
         }
     };
 
@@ -69,7 +74,7 @@ function AddPolicePage() {
                     <div className="glass-signup w-1/2 rounded-2xl backdrop-filter backdrop-blur-md shadow-md bg-gray-800 p-7">
                         <div className="form-container">
                             <h1 className="signup-heading text-2xl font-bold text-white mb-5">Add Police Officer</h1>
-                            <h3>token: {localStorage.getItem('token')}</h3>
+                            <h3 className="text-white">token: {localStorage.getItem('token')}</h3>
                             <label htmlFor="username" className="block text-sm font-medium text-gray-300 mb-1">Username</label>
                             <input
                                 id="username"
