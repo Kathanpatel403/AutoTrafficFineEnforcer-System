@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import generics, permissions
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate, login, logout
 from rest_framework.permissions import AllowAny
@@ -12,6 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from django.http import JsonResponse
 from django.contrib.auth.hashers import make_password
+from rest_framework.authentication import TokenAuthentication
 from .models import Profile
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
@@ -62,7 +63,7 @@ class RegisterView(generics.CreateAPIView):
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['POST'])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])
 def additional_info_view(request):
     token_key = request.headers.get('Authorization', '').split('Token ')[-1]
     
@@ -133,16 +134,28 @@ def login_view(request):
     return Response({"error": "Username or password incorrect. Try again."}, status=status.HTTP_400_BAD_REQUEST)
 
 
-@csrf_exempt
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def logout_view(request):
-    if request.method == 'POST':
-        logout(request)
-        return JsonResponse({"message": "Logout successful"})
-    else:
-        return JsonResponse({"error": "Method not allowed"}, status=405)
+    # Extract the token from the Authorization header
+    token_key = request.headers.get('Authorization', '').split('Token ')[-1]
+    
+    try:
+        # Retrieve the token object and associated user
+        token = Token.objects.get(key=token_key)
+        user = token.user
+        print("token is: ", token)
+    except Token.DoesNotExist:
+        return Response({"message": "Invalid token"}, status=status.HTTP_401_UNAUTHORIZED)
+    
+    # If the token is valid, perform the logout
+    logout(request)
+    return JsonResponse({"message": "Logout successful"})
 
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAdminUser])
 def create_police_user(request):
     username = request.data.get('username')
     email = request.data.get('email')

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function HomePage() {
     const navigate = useNavigate();
@@ -19,9 +19,11 @@ function HomePage() {
 
             // Set the default Authorization header for Axios
             axios.defaults.headers.common['Authorization'] = `Token ${storedToken}`;
-            axios.defaults.headers.common['X-CSRFToken'] = storedToken;
+        } else {
+            // If no token is found, redirect to login
+            navigate('/login');
         }
-    }, []);
+    }, [navigate]);
 
     const handleLogout = async () => {
         try {
@@ -46,6 +48,10 @@ function HomePage() {
         } catch (error) {
             console.error('Logout error:', error);
             // Handle logout error (e.g., display error to user)
+            if (error.response && error.response.status === 401) {
+                console.log('Unauthorized. Please log in again.');
+                navigate('/login');
+            }
         }
     };
 

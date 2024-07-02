@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { Icon } from 'react-icons-kit';
@@ -8,11 +8,13 @@ import first from '../assets/images/first.jpg';
 import second from '../assets/images/second.jpg';
 import third from '../assets/images/third.jpg';
 import fourth from '../assets/images/fourth.jpg';
+import { ThemeContext } from '../components/ThemeContext';
 
 const images = [first, second, third, fourth];
 
 function SignupPage() {
     const navigate = useNavigate();
+    const { theme, toggleTheme } = useContext(ThemeContext);
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -85,13 +87,13 @@ function SignupPage() {
     };
 
     return (
-        <div className="signup-container h-screen flex justify-center items-center bg-gray-900">
+        <div className={`signup-container h-screen flex justify-center items-center ${theme === 'dark' ? 'bg-gray-900' : 'bg-white'}`}>
             <div className="flex justify-between items-center w-full max-w-5xl gap-2.5">
-                <div className="glass-signup w-1/2 rounded-2xl backdrop-filter backdrop-blur-md shadow-md bg-gray-800 p-7">
+                <div className={`glass-signup w-1/2 rounded-2xl backdrop-filter backdrop-blur-md shadow-md ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'} p-7`}>
                     <div className="form-container">
-                        <h1 className="signup-heading text-2xl font-bold text-white mb-5">Sign Up</h1>
+                        <h1 className={`signup-heading text-2xl font-bold mb-5 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>Sign Up</h1>
 
-                        <label htmlFor="username" className="block text-sm font-medium text-gray-300 mb-1">Username</label>
+                        <label htmlFor="username" className={`block text-sm font-medium mb-1 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Username</label>
                         <input
                             id="username"
                             type="text"
@@ -99,10 +101,11 @@ function SignupPage() {
                             onChange={handleUsernameChange}
                             onKeyDown={handleKeyDown}
                             placeholder="Enter username"
-                            className="input-field w-full p-3 mb-4 border-0 rounded-md bg-gray-700 text-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500"
+                            className={`input-field w-full p-3 mb-4 border-0 rounded-md ${theme === 'dark' ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-700'} focus:outline-none focus:ring
+                            ${theme === 'dark' ? 'focus:ring-green-500 focus:border-green-500' : 'focus:ring-blue-500 focus:border-blue-500'}`}
                         />
 
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">Email</label>
+                        <label htmlFor="email" className={`block text-sm font-medium mb-1 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Email</label>
                         <input
                             id="email"
                             type="email"
@@ -110,10 +113,10 @@ function SignupPage() {
                             onChange={handleEmailChange}
                             onKeyDown={handleKeyDown}
                             placeholder="Enter email address"
-                            className="input-field w-full p-3 mb-4 border-0 rounded-md bg-gray-700 text-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500"
+                            className={`input-field w-full p-3 mb-4 border-0 rounded-md ${theme === 'dark' ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-700'} focus:outline-none focus:ring ${theme === 'dark' ? 'focus:ring-green-500 focus:border-green-500' : 'focus:ring-blue-500 focus:border-blue-500'}`}
                         />
 
-                        <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-1">Password</label>
+                        <label htmlFor="password" className={`block text-sm font-medium mb-1 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Password</label>
                         <div className="relative">
                             <input
                                 id="password"
@@ -122,7 +125,7 @@ function SignupPage() {
                                 onChange={handlePasswordChange}
                                 onKeyDown={handleKeyDown}
                                 placeholder="Enter Password"
-                                className="input-field w-full p-3 mb-4 border-0 rounded-md bg-gray-700 text-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500"
+                                className={`input-field w-full p-3 mb-4 border-0 rounded-md ${theme === 'dark' ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-700'} focus:outline-none focus:ring ${theme === 'dark' ? 'focus:ring-green-500 focus:border-green-500' : 'focus:ring-blue-500 focus:border-blue-500'}`}
                             />
                             <button
                                 onClick={handleTogglePasswordVisibility}
@@ -145,11 +148,19 @@ function SignupPage() {
                             Sign Up
                         </button>
 
-                        <div className="login-link text-center mt-3 text-gray-300">
+                        <div className="login-link text-center mt-3">
                             Already have an account?{" "}
                             <span className="signup-link">
                                 <Link to="/login" className="text-green-500 hover:underline">Log in</Link>
                             </span>
+                        </div>
+                        <div className="theme-toggle text-center mt-5">
+                            <button
+                                onClick={toggleTheme}
+                                className="p-2 bg-gray-600 text-white rounded-md cursor-pointer hover:bg-gray-700"
+                            >
+                                Toggle Theme
+                            </button>
                         </div>
                     </div>
                 </div>

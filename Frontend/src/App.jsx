@@ -7,6 +7,7 @@ import HomePage from './screens/HomePage';
 import AddPolicePage from './screens/AddPolicePage';
 import DefaultPage from './screens/DefaultPage';
 import AdditionalInfoPage from './screens/AdditionalInfopage';
+import VehicleDensityCalculationPage from './screens/VehicleDensityCalculationPage';
 
 function App() {
   return (
@@ -18,6 +19,8 @@ function App() {
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/additional-info" element={<AdditionalInfoPage />} />
           <Route path="/home" element={<HomePage />} />
+          <Route path="/admin/home" element={<AdminHomePage />} />
+          <Route path="/admin/calculate-density" element={<VehicleDensityCalculationPage />} />
           <Route path="/admin/home" element={<AdminHomePage />} />
           <Route path="/admin/assign-police-role" element={<AddPolicePage />} />
         </Routes>

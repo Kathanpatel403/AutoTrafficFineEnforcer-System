@@ -24,36 +24,46 @@ function AddPolicePage() {
     const [token, setToken] = useState(null);
 
     useEffect(() => {
-        const intervalId = setInterval(() => {
-            setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
-        }, 1500);
-
-        // Fetch user data from localStorage
+        // Fetch user data and token from localStorage
         const storedUser = JSON.parse(localStorage.getItem('user'));
-        if (storedUser) {
-            setUserRole(storedUser.groups.includes('admin') ? 'admin' : 'other');
-        }
+        const storedToken = localStorage.getItem('token');
 
-        return () => clearInterval(intervalId);
-    }, []);
+        if (storedUser.groups == 'admin' && storedToken) {
+            setUser(storedUser);
+            setToken(storedToken);
+            // setUserRole(storedUser.groups.includes('admin') ? 'admin' : 'other');
+            setUserRole('admin');
+            console.log(`user role is: ${userRole}`)
+            // Set the default Authorization header for Axios
+            axios.defaults.headers.common['Authorization'] = `Token ${storedToken}`;
+        } else {
+            // If no user or token is found, redirect to login
+            // navigate('/login');
+        }
+    }, [navigate]);
 
     // Function to handle form submission
     const handleSignUp = async (e) => {
         e.preventDefault();
-    
+
         try {
             // Send POST request to backend endpoint
             const response = await axios.post('http://localhost:8000/auth/api/assign-police-role/', {
                 username,
                 email,
                 password
+            }, {
+                headers: {
+                    Authorization: `Token ${token}`,
+                    'Content-Type': 'application/json',
+                }
             });
-    
+
             console.log('Signup successful:', response.data);
             setErrorMsg('');  // Clear error message if signup is successful
         } catch (error) {
             console.error('Signup error:', error);
-    
+
             // Handle error message
             if (error.response && error.response.data && error.response.data.error) {
                 setErrorMsg(error.response.data.error);
@@ -63,18 +73,17 @@ function AddPolicePage() {
         }
     };
 
-    const handleHomeNavigation = ()=> {
+    const handleHomeNavigation = () => {
         navigate("/admin/home")
     }
 
-    if (userRole == 'admin') {
+    if (userRole === 'admin') {
         return (
             <div className="signup-container h-screen flex justify-center items-center bg-gray-900">
                 <div className="flex justify-between items-center w-full max-w-5xl gap-2.5">
                     <div className="glass-signup w-1/2 rounded-2xl backdrop-filter backdrop-blur-md shadow-md bg-gray-800 p-7">
                         <div className="form-container">
                             <h1 className="signup-heading text-2xl font-bold text-white mb-5">Add Police Officer</h1>
-                            <h3 className="text-white">token: {localStorage.getItem('token')}</h3>
                             <label htmlFor="username" className="block text-sm font-medium text-gray-300 mb-1">Username</label>
                             <input
                                 id="username"

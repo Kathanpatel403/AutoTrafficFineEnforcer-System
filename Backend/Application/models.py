@@ -1,9 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 # Create your models here.
 class Profile(models.Model):
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
