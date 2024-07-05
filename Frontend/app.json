@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "DestiNation Guide",
+    "slug": "DestiNation Guide",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/image.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/images/image.png",
+      "resizeMode": "contain",
+      "background": "./assets/images/coolbackground.png"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/image.png",
+        "background": "./assets/images/coolbackground.png"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access the camera."
+        }
+      ]
+    ]
+  }
+}

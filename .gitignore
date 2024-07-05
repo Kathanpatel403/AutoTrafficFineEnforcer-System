@@ -1,0 +1,21 @@
+# Ignore node_modules folder for frontend
+Frontend/node_modules/
+
+# Ignore build artifacts and environment-specific files for Frontend
+Frontend/build/
+Frontend/.env
+Frontend/.expo
+Frontend/%ProgramData%
+Frontend/package-lock.json
+
+# Ignore virtual environments, cache, and logs for backend (Django example)
+Backend/venv/
+Backend/Application/__pycache__
+Backend/Backend/__pycache__
+Backend/mongodbapp/__pycache__
+Backend/log/
+
+# Ignore IDE-specific files (e.g., VSCode, IntelliJ) and system-specific files
+.vscode/
+.idea/
+.DS_Store
