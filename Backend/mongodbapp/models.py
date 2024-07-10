@@ -38,3 +38,45 @@ class VehicleRecord(models.Model):
 
     class Meta:
         db_table = 'VehicleRecord'  # Specify the MongoDB collection name
+
+class Address(models.Model):
+    street = models.CharField(max_length=255)
+    area = models.CharField(max_length=255)
+    city = models.CharField(max_length=255)
+    state = models.CharField(max_length=255)
+    postal_code = models.CharField(max_length=20)
+
+    class Meta:
+        abstract = True
+
+class Vehicle(models.Model):
+    _id = models.ObjectIdField()
+    licence_plate_no = models.CharField(max_length=20)
+    rc_no = models.CharField(max_length=20)
+    fuel_type = models.CharField(max_length=20, choices=[
+        ('Petrol', 'Petrol'),
+        ('Diesel', 'Diesel'),
+        ('Electric', 'Electric'),
+        ('Hybrid', 'Hybrid')
+    ])
+    vehicle_type = models.CharField(max_length=20, choices=[
+        ('Car', 'Car'),
+        ('Bike', 'Bike'),
+        ('Truck', 'Truck'),
+        ('Bus', 'Bus'),
+        ('Rickshaw', 'Rickshaw')
+    ])
+    aadharcard_number = models.CharField(max_length=12)
+    address = models.EmbeddedField(
+        model_container=Address
+    )
+    mobile_no = models.CharField(max_length=15)
+    chesis_no = models.CharField(max_length=20)
+    owner_name = models.CharField(max_length=100)
+    engine_no = models.CharField(max_length=20)
+    
+    def __str__(self):
+        return self.licence_plate_no
+
+    class Meta:
+        db_table = 'Vehicle'

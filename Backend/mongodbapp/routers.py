@@ -18,7 +18,7 @@ class MongoDBRouter:
 
     def allow_relation(self, obj1, obj2, **hints):
         if obj1._meta.app_label == 'mongodbapp' or \
-           obj2._meta.app_label == 'mongodbapp':
+            obj2._meta.app_label == 'mongodbapp':
             return True
         return None
 

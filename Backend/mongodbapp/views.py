@@ -4,7 +4,9 @@ from django.http import JsonResponse
 from .models import MongoDBModel, VehicleRecord
 import json
 from django.views.decorators.csrf import csrf_exempt
-
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
 @csrf_exempt
 def add_data(request):
@@ -94,3 +96,22 @@ def retrieve_vehicle_data(request):
 
     else:
         return JsonResponse({'error': 'Method not allowed'}, status=405)
+    
+
+@api_view(['POST'])
+def upload_video(request):
+    if request.method == 'POST' and request.FILES.get('video'):
+        try:
+            video_file = request.FILES['video']
+            # Process the video file here (e.g., save it, analyze it)
+            # Example: Save video to a specific location
+            with open('path/to/save/videos/' + video_file.name, 'wb+') as destination:
+                for chunk in video_file.chunks():
+                    destination.write(chunk)
+            
+            return Response({"message": "Video uploaded successfully"}, status=status.HTTP_201_CREATED)
+        
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+    
+    return Response({"error": "Video file not found"}, status=status.HTTP_400_BAD_REQUEST)

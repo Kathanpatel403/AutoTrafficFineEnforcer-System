@@ -30,6 +30,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,7 +42,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'djongo',
-    'mongodbapp'
+    'mongodbapp',
+    'channels'
 ]
 
 MIDDLEWARE = [
@@ -74,7 +76,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Backend.wsgi.application'
-
+ASGI_APPLICATION = 'Backend.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -86,7 +88,7 @@ DATABASES = {
     },
     'mongodb': {
         'ENGINE': 'djongo',
-        'NAME': 'AutoFineEnforcer',  # Name of your MongoDB database
+        'NAME': 'AutoFineEnforcer', 
         'CLIENT': {
             'host': 'mongodb+srv://AutoFineEnforcer-System:123@autotrafficfineenforcer.caji8p2.mongodb.net/',  # MongoDB host address
         }
@@ -94,6 +96,12 @@ DATABASES = {
 }
 
 DATABASE_ROUTERS = ['mongodbapp.routers.MongoDBRouter']
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',  # Use Redis or other backend in production
+    },
+}
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -104,6 +112,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
