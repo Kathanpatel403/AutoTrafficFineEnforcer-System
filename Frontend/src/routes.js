@@ -50,6 +50,8 @@ import Logout from "layouts/authentication/logout";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
+import VehicleDensityPage from "components/VehicleDensityPage";
+import ALPR from "components/ALPR";
 
 
 const routes = [
@@ -130,7 +132,22 @@ const routes = [
     route: "/logout",
     component: <Logout />,
   },
-
+  {
+    type: "collapse",
+    name: "Vehicle Density",
+    key: "Vehicle-Density",
+    icon: <Icon fontSize="small">login</Icon>,
+    route: "/vehicle-density",
+    component: <VehicleDensityPage />,
+  },
+  {
+    type: "collapse",
+    name: "ALPR",
+    key: "ALPR",
+    icon: <Icon fontSize="small">login</Icon>,
+    route: "/alpr",
+    component: <ALPR />,
+  },
 ];
 
 export default routes;

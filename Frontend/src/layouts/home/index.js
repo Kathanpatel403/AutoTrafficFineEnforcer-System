@@ -1,8 +1,8 @@
 import React from 'react';
-import Navbar from 'components/navbar_home'; // Assuming you have a Navbar component
-import { FaCheckCircle } from 'react-icons/fa'; // Example icon import
-import image1 from '../../assets/images/ATFE (0).png'; // Example image import
-import image2 from '../../assets/images/ATFE (0).png'; // Example image import
+import Navbar from 'components/navbar_home'; 
+import { FaCheckCircle } from 'react-icons/fa'; 
+import image1 from '../../assets/images/ATFE (0).png'; 
+import image2 from '../../assets/images/ATFE (0).png'; 
 import bg from '../../assets/images/bg17.jpg' 
 import { Link } from 'react-router-dom';
 const HomePage = () => {

@@ -59,11 +59,10 @@ function LoginPage() {
 
         console.log('Login successful:', response.data);
 
-        // Redirect to homepage or any other route
         if (user.groups.includes("admin")) {
             navigate("/home");
         } else {
-          console.log("this is not admin")
+          console.log("this is not admin");
         }
     } catch (error) {
         console.error('Login error:', error);

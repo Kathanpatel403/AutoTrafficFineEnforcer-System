@@ -195,7 +195,7 @@ export default function App() {
   const { pathname } = useLocation();
 
   // Define routes where the Sidenav should not be displayed
-  const noSidenavRoutes = ["/login","/sign-up","/home", "/forgot-password","/es"];
+  const noSidenavRoutes = ["/login","/sign-up","/home", "/forgot-password","/es", "/vehicle-density", "/alpr"];
 
   const handleOnMouseEnter = () => {
     if (miniSidenav && !onMouseEnter) {
