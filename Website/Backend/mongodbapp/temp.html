@@ -1,0 +1,179 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live ANPR Video Feed</title>
+    <style>
+        body {
+            background-color: #829dae   ;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+            letter-spacing: 1px;
+        }
+
+        .video-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .video-card {
+            position: relative;
+            width: 450px;
+            height: 350px;
+            background-color: #29293f;
+            border-radius: 12px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .video-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        .video-frame {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .video-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .video-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .overlay-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.8rem;
+            color: #fff;
+            opacity: 0.85;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .overlay-icon:hover {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        .card-title {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+        }
+        button {
+    background: linear-gradient(135deg, #829dae, #7d9bad);
+    color: #fff;
+    font-size: 1rem;
+    padding: 12px 24px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #3aaef7, rgb(59, 208, 234));
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+    transform: translateY(-3px);
+}
+
+button:active {
+    background: linear-gradient(135deg, #8b3d3d, #cd5a5a);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+    transform: translateY(0);
+}
+
+        @media (max-width: 768px) {
+            .video-card {
+                width: 100%;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Live ANPR Video Feed</h1>
+    <div class="video-container">
+        <div class="video-card">
+            <div class="video-frame">
+                <img id="video-feed-1" src="your-video-url-1" alt="ANPR Feed 1">
+                <div class="overlay-icon">🚗</div>
+                <div class="card-title">Camera 1</div>
+            </div>
+        </div>
+        <div class="video-card">
+            <div class="video-frame">
+                <img id="video-feed-2" src="your-video-url-2" alt="ANPR Feed 2">
+                <div class="overlay-icon">📷</div>
+                <div class="card-title">Camera 2</div>
+            </div>
+        </div>
+        <div class="video-card">
+            <div class="video-frame">
+                <img id="video-feed-3" src="your-video-url-3" alt="ANPR Feed 3">
+                <div class="overlay-icon">🔍</div>
+                <div class="card-title">Camera 3</div>
+            </div>
+        </div>
+        <div class="video-card">
+            <div class="video-frame">
+                <img id="video-feed-4" src="your-video-url-4" alt="ANPR Feed 4">
+                <div class="overlay-icon">📹</div>
+                <div class="card-title">Camera 4</div>
+            </div>
+        </div>
+    </div>
+
+    <button id="redirectButton">Click me</button>
+
+    <script>
+        document.getElementById('redirectButton').addEventListener('click', function() {
+            window.location.href = 'http://localhost:3000/home'; // Replace with your URL
+        });
+    </script>
+</body>
+</html> -->
+
+
+
+System check identified no issues (0 silenced).
+September 08, 2024 - 19:42:50
+Django version 3.1.12, using settings 'Backend.settings'
+Starting ASGI/Daphne version 4.1.2 development server at http://127.0.0.1:8000/
+Quit the server with CTRL-BREAK.
+Forbidden (CSRF cookie not set.): /mongodb/detect_characters/
+HTTP POST /mongodb/detect_characters/ 403 [0.54, 127.0.0.1:49706]
+Forbidden (CSRF cookie not set.): /mongodb/detect_characters/
+HTTP POST /mongodb/detect_characters/ 403 [0.03, 127.0.0.1:49712]
+C:\ATFE\Backend\mongodbapp\views.py changed, reloading.
+Watching for file changes with StatReloader
+Performing system checks...
